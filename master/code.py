@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from hardware import *
 
 
 def find_ball(image):
@@ -60,16 +61,7 @@ def process_frame(name):
     
     
     detector(frame, walls, ball_mask)
-    
-def calculate_path(frame):
-    #############################################
-    # Aquesta funció servirà per a calcular el
-    # camí que la pilota ha de recorrer fins
-    # arribar al final.
-    # Retorna la direcció cap on ha d'anar la
-    # pilota respecte on es troba
-    #############################################
-    pass
+
 
 def inclination(direction):
     #############################################
@@ -94,6 +86,8 @@ def setup_components():
     # nents siguin funcionals.
     ############################################
     pass
+
+    
 
 #################################################
 ######## SPACE FOR MORE NEEDED FUNCTIONS ########
