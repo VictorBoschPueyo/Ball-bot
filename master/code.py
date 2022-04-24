@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from hardware import *
+import copy as cp
 
 
 def find_ball(image):
@@ -53,6 +54,7 @@ def process_frame(name):
     
     
     ball_mask, ball = find_ball(frame)
+    calculate_boxes(frame, ball_mask)
     
     maze = cv2.subtract(frame, ball)
     maze[np.where(ball_mask==255)] = 255
@@ -61,6 +63,43 @@ def process_frame(name):
     
     
     detector(frame, walls, ball_mask)
+
+def calculate_boxes(image, ball_mask):
+    copy_image = cp.deepcopy(image)
+    #Quitar puntos aislados
+    kernel = np.ones((3,3),np.uint8)
+    mask = cv2.morphologyEx(ball_mask, cv2.MORPH_OPEN, kernel)
+    
+    #Conocer pixeles que corresponden a la bola
+    indices = np.argwhere(mask == 255)
+    
+    #Calcular tamaño en pixeles de la bola, aprox
+    size = np.max(indices, axis=0) - np.min(indices, axis=0)
+    
+    '''Dibujo los cuadrados. En (i,j) tenemos el punto de comienzo de cada cuadrado (esquina superior izquierda),y 
+       (i+size[0],j+size[1]) es el punto final de cada cuadrado (esquina inferior derecha)'''
+    # Blue color in BGR
+    color = (255, 0, 0)
+  
+    # Line thickness of 2 px
+    thickness = 2
+    for i in range(0, copy_image.shape[0], size[0]):
+        for j in range(0, copy_image.shape[1], size[1]):
+            if i + size[0] > copy_image.shape[0]:
+                copy_image = cv2.rectangle(copy_image, (i,j), (copy_image.shape[0],j+size[1]), color, thickness)
+                continue
+            else:
+                copy_image = cv2.rectangle(copy_image, (i,j), (i+size[0],j+size[1]), color, thickness)
+                continue
+            
+            if j + size[1] > copy_image.shape[1]:
+                copy_image = cv2.rectangle(copy_image, (i,j), (i+size[0],copy_image.shape[1]), color, thickness)
+                continue
+            else:
+                copy_image = cv2.rectangle(copy_image, (i,j), (i+size[0],j+size[1]), color, thickness)
+                continue
+    #Muestro imagen
+    cv2.imshow("Cuadricula", copy_image) 
 
 
 def inclination(direction):
