@@ -51,18 +51,34 @@ def detector(image, walls, ball):
 def process_frame(name):
     frame = cv2.imread(name)
     frame = cv2.resize(frame, (540, 540))
-    
+    #Quitar puntos aislados
+    kernel = np.ones((3,3),np.uint8)
+    frame = cv2.morphologyEx(frame, cv2.MORPH_OPEN, kernel)
     
     ball_mask, ball = find_ball(frame)
-    calculate_boxes(frame, ball_mask)
     
     maze = cv2.subtract(frame, ball)
     maze[np.where(ball_mask==255)] = 255
     
     walls, wall_bin = read_board(maze)
     
+    #Eliminamos fondos
+    frame = delete_background(wall_bin, frame)
+    ball_mask = delete_background(wall_bin, ball_mask)
+    walls = delete_background(wall_bin, walls)
+    ball = delete_background(wall_bin, ball)
+    
+    calculate_boxes(frame, ball_mask)
     
     detector(frame, walls, ball_mask)
+    
+def delete_background(wall_bin, img):
+    ''' ES NECESARIA LA BINARIZACION DE LAS PAREDES PARA BORRAR EL FONDO'''
+    indices = np.argwhere(wall_bin)
+    size_board = np.max(indices, axis=0) - np.min(indices, axis=0) #podria ser util
+    img = img[np.min(indices, axis=0)[0]:np.max(indices, axis=0)[1],np.min(indices, axis=0)[1]:np.max(indices, axis=0)[1]]
+    return img
+    
 
 def calculate_boxes(image, ball_mask):
     copy_image = cp.deepcopy(image)
