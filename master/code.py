@@ -45,7 +45,6 @@ def setup_components():
     pass
 
     
-
 #################################################
 ######## SPACE FOR MORE NEEDED FUNCTIONS ########
 #################################################
@@ -53,11 +52,7 @@ def setup_components():
 if __name__ == '__main__':  
     #process_frame('bdd/prova1.jpeg')
     frame=pre_process_image('bdd/prova1.jpeg')
-
     nodes=[]
-    height=540
-    width=540
-   
     start = time.time()
     test=Board(frame)
     end = time.time()

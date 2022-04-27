@@ -1,7 +1,4 @@
 import gpio
-
-
-
 def test_camera():
     pass
 

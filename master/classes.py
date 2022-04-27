@@ -167,7 +167,6 @@ class Board:
         result = cv2.bitwise_and(result, result, mask=mask)
         return mask, result
 
-
     def detector(self):
         #############################################
         # Aquesta funció servirà per a detectar
