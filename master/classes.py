@@ -4,8 +4,20 @@ import copy as cp
 
 
 class Node:
-    def __init__(self, row, col, wall):
-        self.position = (row, col)
+    def __init__(self, pos_ini, pos_fin, wall, size):
+        ############################
+        # Actual list of attributes:
+        #   -Pos_ini
+        #   -Pos_fin
+        #   -Size of box
+        #   -Is wall or not
+        #   -Edges
+        #   -Neighbors
+        ############################
+        
+        self.pos_ini = pos_ini
+        self.pos_fin = pos_fin
+        self.size = size
         self.is_wall = wall # true/false
         self.egdes = [] #list of egdes 
         self.neighbours = [] #list of neighbours 
@@ -15,28 +27,45 @@ class Node:
 
         
 class Board:
-    def __init__(self, nodes, height, width, frame):
-        #Falta definir esta parte
-        self.box_list = nodes
-        self.size = (height, width)
+    def __init__(self, frame):
+        ############################
+        # Actual list of attributes:
+        #   -List of boxes
+        #   -Ball, and its mask
+        #   -Walls and its mask
+        #   -Initial frame
+        #   -Size of the board
+        ############################
+        
+        self.list_boxes = []
         self.ball_mask, self.ball = self.ball_position(frame)
     
 
         maze=cv2.subtract(frame, self.ball)
         maze[np.where(self.ball_mask==255)] = 255
         self.walls, self.wall_bin = self.read_board(maze)
+        
+        self.size = self.calculate_sizeB(self.wall_bin)
 
         #Eliminado el borde
         self.initial_frame = self.delete_background(self.wall_bin, frame)
         self.ball_mask = self.delete_background(self.wall_bin, self.ball_mask)
         self.ball = self.delete_background(self.wall_bin, self.ball)
         self.walls = self.delete_background(self.wall_bin, self.walls)
+        self.wall_bin = self.delete_background(self.wall_bin, self.wall_bin)
         
-
-    def delete_background(self,wall_bin, img):
+        self.calculate_boxes()
+        self.detector()
+        
+    
+    def calculate_sizeB(self, wall_bin):
+        indices = np.argwhere(wall_bin)
+        self.size = np.max(indices, axis=0) - np.min(indices, axis=0)
+        
+    def delete_background(self, wall_bin, img):
         ''' ES NECESARIA LA BINARIZACION DE LAS PAREDES PARA BORRAR EL FONDO'''
         indices = np.argwhere(wall_bin)
-        size_board = np.max(indices, axis=0) - np.min(indices, axis=0) #podria ser util
+        self.size = np.max(indices, axis=0) - np.min(indices, axis=0)
         img = img[np.min(indices, axis=0)[0]:np.max(indices, axis=0)[1],np.min(indices, axis=0)[1]:np.max(indices, axis=0)[1]]
         return img
 
@@ -94,9 +123,11 @@ class Board:
         for i in range(0, copy_image.shape[0], size[0]):
             for j in range(0, copy_image.shape[1], size[1]):
                 if i + size[0] > copy_image.shape[0]:
+                    self.build_box((i,j), (copy_image.shape[0],j+size[1]), self.wall_bin[i:copy_image.shape[0],j:j+size[1]])
                     copy_image = cv2.rectangle(copy_image, (i,j), (copy_image.shape[0],j+size[1]), color, thickness)
                     continue
                 else:
+                    self.build_box((i,j), (i+size[0],j+size[1]), self.wall_bin[i:i+size[0],j:j+size[1]])
                     copy_image = cv2.rectangle(copy_image, (i,j), (i+size[0],j+size[1]), color, thickness)
                     continue
 
@@ -113,7 +144,15 @@ class Board:
         cv2.destroyAllWindows()
     
 
-   
+    def build_box(self, pos_ini, pos_fin, box_matrix):
+        black_pixels = np.count_nonzero(box_matrix == 0)
+        total_pixels = box_matrix.size
+        #Pondremos a partir de 60% de pared se define como pared
+        if black_pixels / total_pixels > 0.6:
+            self.list_boxes.append(Node(pos_ini, pos_fin, True, (pos_fin[0] - pos_ini[0], pos_fin[1] - pos_ini[1])))
+        else:
+            self.list_boxes.append(Node(pos_ini, pos_fin, False, (pos_fin[0] - pos_ini[0], pos_fin[1] - pos_ini[1])))
+    
     def ball_position(self,image):
         #############################################
         # Aquesta funció servirà per a determinar

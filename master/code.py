@@ -3,6 +3,7 @@ import numpy as np
 from hardware import *
 from classes import *
 import copy as cp
+import time
 
 
 def pre_process_image(path):
@@ -57,10 +58,10 @@ if __name__ == '__main__':
     height=540
     width=540
    
-
-    test=Board(nodes, height, width, frame)
-    test.calculate_boxes()
-    test.detector()
+    start = time.time()
+    test=Board(frame)
+    end = time.time()
+    print("El.lapsed time preparing Board: ", end - start)
     
 
 
