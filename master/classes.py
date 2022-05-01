@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import copy as cp
-
+import math
 
 class Node:
     def __init__(self, pos_ini, pos_fin, wall, size):
@@ -56,6 +56,7 @@ class Board:
         
         self.calculate_boxes()
         self.detector()
+        self.calculate_neighbors()
         
     
     def calculate_sizeB(self, wall_bin):
@@ -185,3 +186,24 @@ class Board:
         cv2.imshow('Image con contornos', img)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
+
+    def calculate_neighbors(self):
+         #############################################
+        # Aquesta funció servirà per a calcular
+        # els veins possibles de cada node
+        #############################################
+        tots = self.list_boxes.copy()
+        dist = tots[0].size[0]
+        for node1 in tots:
+            print(dist)
+            for node2 in tots:
+                if node1 != node2:
+                    x = node2.pos_ini[0] - node1.pos_ini[0]
+                    y = node2.pos_ini[1] - node1.pos_ini[1]
+                    longitud = math.sqrt(pow(x,2) + pow(y,2))
+                    print(longitud)
+                    if (dist <= longitud and node2.is_wall == False):
+                        node1.set_neighbour(node2)
+        
+fr = cv2.imread("bdd/prova1.jpeg")
+Br = Board(fr)
