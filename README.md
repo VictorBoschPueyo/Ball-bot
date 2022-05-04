@@ -19,7 +19,6 @@ The following features make our project unique:
 - Control of the edges, because the ball cannot go out of the board.
 - Device for displaying the path to be taken, or the path that is currently being taken.
 
-
 ## Features
 
 - Import a HTML file and watch it magically convert to Markdown
