@@ -1,4 +1,12 @@
 import gpio
+from adafruit_servokit import ServoKit
+#Initialize the kit
+kit = ServoKit(channels=16)
+gpio.set_mode(gpio.BOARD)
+gpio.setup(7, gpio.OUT)
+gpio.setup(8, gpio.OUT)
+
+
 def test_camera():
     pass
 
@@ -9,17 +17,24 @@ def test_servos():
 
 def test_screen():
     pass
-
+  
 
 def move_board(direction):
     if direction == 'up':
-        pass
+        kit.servo[0].angle = 95
+        kit.servo[1].angle = 90
     elif direction == 'down':
-        pass
+        kit.servo[0].angle = 90
+        kit.servo[1].angle = 95
     elif direction == 'left':
-        pass
+        kit.servo[0].angle = -95
+        kit.servo[1].angle = 90
     elif direction == 'right':
-        pass
+        kit.servo[0].angle = 90
+        kit.servo[1].angle = -95
+    elif direction == 'stop':
+        kit.servo[0].angle = 90
+        kit.servo[1].angle = 90
     
     
 def connect():
