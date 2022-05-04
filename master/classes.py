@@ -4,7 +4,7 @@ import copy as cp
 import math
 
 class Node:
-    def __init__(self, pos_ini, pos_fin, wall, size):
+    def __init__(self, pos, wall):
         ############################
         # Actual list of attributes:
         #   -Pos_ini
@@ -15,9 +15,7 @@ class Node:
         #   -Neighbors
         ############################
         
-        self.pos_ini = pos_ini
-        self.pos_fin = pos_fin
-        self.size = size
+        self.pos = pos
         self.is_wall = wall # true/false
         self.egdes = [] #list of egdes 
         self.neighbours = [] #list of neighbours 
@@ -35,19 +33,19 @@ class Board:
         #   -Walls and its mask
         #   -Initial frame
         #   -Size of the board
+        #   -Ball position
         ############################
         
         self.list_boxes = []
-        self.ball_mask, self.ball = self.ball_position(frame)
+        self.ball_position = (0,0)
+        self.ball_mask, self.ball = self.binarize_ball(frame)
     
 
         maze=cv2.subtract(frame, self.ball)
         maze[np.where(self.ball_mask==255)] = 255
         self.walls, self.wall_bin = self.read_board(maze)
-        
-        self.size = self.calculate_sizeB(self.wall_bin)
 
-        #Eliminado el borde
+        #Eliminado el borde de madera (el fondo que estorba, vamos)
         self.initial_frame = self.delete_background(self.wall_bin, frame)
         self.ball_mask = self.delete_background(self.wall_bin, self.ball_mask)
         self.ball = self.delete_background(self.wall_bin, self.ball)
@@ -55,20 +53,19 @@ class Board:
         self.wall_bin = self.delete_background(self.wall_bin, self.wall_bin)
         
         self.calculate_boxes()
-        self.detector()
-        self.calculate_neighbors()
+        self.calculate_ballPosition()
+        #self.detector()
+        #self.calculate_neighbors()
         
-    
-    def calculate_sizeB(self, wall_bin):
-        indices = np.argwhere(wall_bin)
-        self.size = np.max(indices, axis=0) - np.min(indices, axis=0)
         
     def delete_background(self, wall_bin, img):
         ''' ES NECESARIA LA BINARIZACION DE LAS PAREDES PARA BORRAR EL FONDO'''
         indices = np.argwhere(wall_bin)
-        self.size = np.max(indices, axis=0) - np.min(indices, axis=0)
         img = img[np.min(indices, axis=0)[0]:np.max(indices, axis=0)[1],np.min(indices, axis=0)[1]:np.max(indices, axis=0)[1]]
-        return img
+        #Quitar puntos aislados
+        kernel = np.ones((3,3),np.uint8)
+        img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+        return cv2.resize(img, (20,20))
 
 
     def solve_maze(self):
@@ -99,62 +96,16 @@ class Board:
         walls = cv2.erode(walls, kernel_e, iterations=3) # dilate a parets
 
         return walls, wall_bin     
-
+    
     def calculate_boxes(self):
-        #############################################
-          
-        copy_image = cp.deepcopy(self.initial_frame)
-        #Quitar puntos aislados
-        kernel = np.ones((3,3),np.uint8)
-        mask = cv2.morphologyEx(self.ball_mask, cv2.MORPH_OPEN, kernel)
-
-        #Conocer pixeles que corresponden a la bola
-        indices = np.argwhere(mask == 255)
-        
-        #Calcular tamaño en pixeles de la bola, aprox
-        size = np.max(indices, axis=0) - np.min(indices, axis=0)
-        
-        '''Dibujo los cuadrados. En (i,j) tenemos el punto de comienzo de cada cuadrado (esquina superior izquierda),y 
-        (i+size[0],j+size[1]) es el punto final de cada cuadrado (esquina inferior derecha)'''
-        # Blue color in BGR
-        color = (255, 0, 0)
+        ###########################################
+        # Calcular información sobre cada pixel
+        ###########################################
+        for i in range(0,20):
+            for j in range(0,20):
+                self.list_boxes.append(Node((i,j),self.wall_bin[i,j] == 0))
     
-        # Line thickness of 2 px
-        thickness = 2
-        for i in range(0, copy_image.shape[0], size[0]):
-            for j in range(0, copy_image.shape[1], size[1]):
-                if i + size[0] > copy_image.shape[0]:
-                    self.build_box((i,j), (copy_image.shape[0],j+size[1]), self.wall_bin[i:copy_image.shape[0],j:j+size[1]])
-                    copy_image = cv2.rectangle(copy_image, (i,j), (copy_image.shape[0],j+size[1]), color, thickness)
-                    continue
-                else:
-                    self.build_box((i,j), (i+size[0],j+size[1]), self.wall_bin[i:i+size[0],j:j+size[1]])
-                    copy_image = cv2.rectangle(copy_image, (i,j), (i+size[0],j+size[1]), color, thickness)
-                    continue
-
-                '''if j + size[1] > copy_image.shape[1]:
-                    copy_image = cv2.rectangle(copy_image, (i,j), (i+size[0],copy_image.shape[1]), color, thickness)
-                    continue
-                else:
-                    copy_image = cv2.rectangle(copy_image, (i,j), (i+size[0],j+size[1]), color, thickness)
-                    continue'''
-        
-        #Mostrar imagen con cuadrados
-        cv2.imshow("Cuadricula", copy_image[0:self.size[0], 0:self.size[1]])
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-    
-
-    def build_box(self, pos_ini, pos_fin, box_matrix):
-        black_pixels = np.count_nonzero(box_matrix == 0)
-        total_pixels = box_matrix.size
-        #Pondremos a partir de 60% de pared se define como pared
-        if black_pixels / total_pixels > 0.6:
-            self.list_boxes.append(Node(pos_ini, pos_fin, True, (pos_fin[0] - pos_ini[0], pos_fin[1] - pos_ini[1])))
-        else:
-            self.list_boxes.append(Node(pos_ini, pos_fin, False, (pos_fin[0] - pos_ini[0], pos_fin[1] - pos_ini[1])))
-    
-    def ball_position(self,image):
+    def binarize_ball(self,image):
         #############################################
         # Aquesta funció servirà per a determinar
         # la posició de la pilota en el frame actual
@@ -166,6 +117,7 @@ class Board:
         upper = np.array([10,255,255])
         mask = cv2.inRange(image, lower, upper)
         result = cv2.bitwise_and(result, result, mask=mask)
+        
         return mask, result
 
     def detector(self):
@@ -204,6 +156,13 @@ class Board:
                     print(longitud)
                     if (dist <= longitud and node2.is_wall == False):
                         node1.set_neighbour(node2)
+                        
+    def calculate_ballPosition(self):
+        ##############################################
+        # Calcula la posicion del centro de la pelota
+        ##############################################
         
-fr = cv2.imread("bdd/prova1.jpeg")
-Br = Board(fr)
+        indices = np.where(self.ball_mask == 255)
+        indices = np.sort(indices)
+        indices = np.median(indices, axis=1)
+        self.ball_position = (int(indices[0]), int(indices[1]))
