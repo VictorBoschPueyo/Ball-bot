@@ -55,7 +55,7 @@ class Board:
         self.calculate_boxes()
         self.calculate_ballPosition()
         #self.detector()
-        #self.calculate_neighbors()
+        self.calculate_neighbors()
         
         
     def delete_background(self, wall_bin, img):
@@ -145,18 +145,16 @@ class Board:
         # els veins possibles de cada node
         #############################################
         tots = self.list_boxes.copy()
-        dist = tots[0].size[0]
         for node1 in tots:
-            print(dist)
             for node2 in tots:
-                if node1 != node2:
-                    x = node2.pos_ini[0] - node1.pos_ini[0]
-                    y = node2.pos_ini[1] - node1.pos_ini[1]
-                    longitud = math.sqrt(pow(x,2) + pow(y,2))
-                    print(longitud)
-                    if (dist <= longitud and node2.is_wall == False):
-                        node1.set_neighbour(node2)
-                        
+                if node1 != node2 and node2.is_wall == False:
+                    if (node2.pos[1] == node1.pos[1]):
+                        if (node2.pos[0] == node1.pos[0]+1) or (node2.pos[0] == node1.pos[0]-1):
+                            node1.set_neighbour(node2)
+                    if (node2.pos[0] == node1.pos[0]):
+                        if (node2.pos[1] == node1.pos[1]+1) or (node2.pos[1] == node1.pos[1]-1):
+                            node1.set_neighbour(node2)
+                   
     def calculate_ballPosition(self):
         ##############################################
         # Calcula la posicion del centro de la pelota
@@ -166,3 +164,4 @@ class Board:
         indices = np.sort(indices)
         indices = np.median(indices, axis=1)
         self.ball_position = (int(indices[0]), int(indices[1]))
+
