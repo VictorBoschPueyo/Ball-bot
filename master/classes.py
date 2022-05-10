@@ -165,3 +165,31 @@ class Board:
         indices = np.median(indices, axis=1)
         self.ball_position = (int(indices[0]), int(indices[1]))
 
+    def Backtracking(self,graph,node_inici,node_desti):
+        ##############################################
+        #Calcular camí més optim amb Backtracking
+        ##############################################
+        path = []
+        path.append(node_inici)
+        if node_inici == node_desti:
+            return path
+        else:
+            for node in graph[node_inici]:
+                if node not in path:
+                    path.append(node)
+                    if node == node_desti:
+                        return path
+                    else:
+                        path = self.Backtracking(graph,node,node_desti)
+                        if path != None:
+                            return path
+        return None
+
+
+
+    
+
+   
+        
+        
+
