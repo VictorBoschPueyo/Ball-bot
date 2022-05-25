@@ -6,6 +6,7 @@ import copy as cp
 import time
 
 
+
 def pre_process_image(path):
     #############################################
     # Aquesta funció s'encarrega de fer una
@@ -48,15 +49,24 @@ def setup_components():
 #################################################
 ######## SPACE FOR MORE NEEDED FUNCTIONS ########
 #################################################
+def show_matriz(sol):
+    for i in sol:
+        for j in i:
+            print(str(j) + " ", end ="")
+        print("")
+
 
 if __name__ == '__main__':  
-    #process_frame('bdd/prova1.jpeg')
     frame=pre_process_image('bdd/prova1.jpeg')
-    nodes=[]
-    start = time.time()
     test=Board(frame)
-    end = time.time()
-    print("El.lapsed time preparing Board: ", end - start)
+    start = 1,18
+    end = 20,18
+
+    print(list(reversed(test.get_path(start,end))))
+ 
+    
+ 
+
     
 
 

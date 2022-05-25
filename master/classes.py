@@ -1,7 +1,9 @@
 import numpy as np
 import cv2
-import copy as cp
-import math
+from PIL import Image, ImageDraw
+import time 
+import multiprocessing
+
 
 class Node:
     def __init__(self, pos, wall):
@@ -17,7 +19,7 @@ class Node:
         
         self.pos = pos
         self.is_wall = wall # true/false
-        self.egdes = [] #list of egdes 
+        self.visited = False #list of egdes 
         self.neighbours = [] #list of neighbours 
     
     def set_neighbour(self, node):
@@ -39,7 +41,8 @@ class Board:
         self.list_boxes = []
         self.ball_position = (0,0)
         self.ball_mask, self.ball = self.binarize_ball(frame)
-    
+        self.N=20
+        self.images = []
 
         maze=cv2.subtract(frame, self.ball)
         maze[np.where(self.ball_mask==255)] = 255
@@ -57,6 +60,8 @@ class Board:
         #self.detector()
         self.calculate_neighbors()
         
+        self.a=np.pad(1-self.get_simple_matrix(), 1, 'constant', constant_values=1)
+        self.images=[]
         
     def delete_background(self, wall_bin, img):
         ''' ES NECESARIA LA BINARIZACION DE LAS PAREDES PARA BORRAR EL FONDO'''
@@ -66,17 +71,6 @@ class Board:
         kernel = np.ones((3,3),np.uint8)
         img = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
         return cv2.resize(img, (20,20))
-
-
-    def solve_maze(self):
-        #############################################
-        # Aquesta funció servirà per a calcular el
-        # camí que la pilota ha de recorrer fins
-        # arribar al final.
-        # Retorna la direcció cap on ha d'anar la
-        # pilota respecte on es troba
-        #############################################
-        pass
 
     def read_board(self,maze):
         lower_white = np.array([0, 0, 175])
@@ -165,31 +159,148 @@ class Board:
         indices = np.median(indices, axis=1)
         self.ball_position = (int(indices[0]), int(indices[1]))
 
-    def Backtracking(self,graph,node_inici,node_desti):
+    def calcule_index_from_ball_position(self,cordinates):
         ##############################################
-        #Calcular camí més optim amb Backtracking
+        # Calcula el index del node a partir de les cordenades
         ##############################################
-        path = []
-        path.append(node_inici)
-        if node_inici == node_desti:
-            return path
-        else:
-            for node in graph[node_inici]:
-                if node not in path:
-                    path.append(node)
-                    if node == node_desti:
-                        return path
-                    else:
-                        path = self.Backtracking(graph,node,node_desti)
-                        if path != None:
-                            return path
-        return None
+        for node in self.list_boxes:
+            if node.pos == cordinates:
+                return self.list_boxes.index(node)
+        return -1
 
+
+    def get_simple_matrix(self):
+        ##############################################
+        # Calcula la matriu de veins simple
+        ##############################################
+        nodes=np.zeros((20,20))
+        matriz_nodes = np.array(self.list_boxes)
+        matriz_nodes=matriz_nodes.reshape(20,20)
+        #if node is not wall put 1 in nodes
+        for i in range(0,20):
+            for j in range(0,20):
+                if matriz_nodes[i,j].is_wall==False:
+                    nodes[i,j]=1
+        return nodes
+
+
+    def make_step(self,k,m):
+        ##############################################
+        # Realiza un pas de la busqueda
+        ##############################################
+            for i in range(len(m)):
+                for j in range(len(m[i])):
+                    if m[i][j] == k:
+                         if i>0 and m[i-1][j] == 0 and self.a[i-1][j] == 0:
+                            m[i-1][j] = k + 1
+                         if j>0 and m[i][j-1] == 0 and self.a[i][j-1] == 0:
+                            m[i][j-1] = k + 1
+                         if i<len(m)-1 and m[i+1][j] == 0 and self.a[i+1][j] == 0:
+                            m[i+1][j] = k + 1
+                         if j<len(m[i])-1 and m[i][j+1] == 0 and self.a[i][j+1] == 0:
+                            m[i][j+1] = k + 1
+
+
+    def draw_matrix(self,a,m,start,end, the_path = []):
+        ##############################################
+        # Dibuja la matriu de veins
+        ##############################################
+        zoom = 20
+        borders = 6
+
+        im = Image.new('RGB', (zoom * len(a[0]), zoom * len(a)), (255, 255, 255))
+        draw = ImageDraw.Draw(im)
+
+
+        for i in range(len(a)):
+            for j in range(len(a[i])):
+                color = (255, 255, 255)
+                r = 0
+                if a[i][j] == 1:
+                    color = (0, 0, 0)
+                if i == start[0] and j == start[1]:
+                    color = (0, 0, 255)
+                    r = borders
+                if i == end[0] and j == end[1]:
+                    color = (0, 255, 0)
+                    
+                    r = borders
+                draw.rectangle((j*zoom+r, i*zoom+r, j*zoom+zoom-r-1, i*zoom+zoom-r-1), fill=color)
+                if m[i][j] > 0:
+                    r = borders
+                    draw.ellipse((j * zoom + r, i * zoom + r, j * zoom + zoom - r - 1, i * zoom + zoom - r - 1),
+                                        fill=(255,0,0))
+
+        
+        for u in range(len(the_path)-1):
+            draw.line((the_path[u][1]*zoom+zoom/2, the_path[u][0]*zoom+zoom/2, the_path[u+1][1]*zoom+zoom/2, the_path[u+1][0]*zoom+zoom/2), fill=(0,255,0),width=3)
+        
+        self.images.append(im)
+        
+
+    def save_img(self):
+        ##############################################
+        # Guarda la imatge
+        ##############################################
+        self.images[0].save('recreation.gif',save_all=True, append_images= self.images[1:],optimize=False, duration=1, loop=0)
+
+
+    def get_path(self,start,end):
+        ##############################################
+        # Calcula el cammin de la busqueda
+        ##############################################
+            
+              
+            m = []
+            for i in range(len(self.a)):
+                m.append([])
+                for j in range(len(self.a[i])):
+                    m[-1].append(0)
+
+            i,j = start
+            m[i][j] = 1
+            k = 0
+
+            while m[end[0]][end[1]] == 0:
+                k += 1
+                self.make_step(k,m)
+                self.draw_matrix(self.a, m,start,end)
+
+            i, j = end
+            k = m[i][j]
+            the_path = [(i,j)]
+
+            
+            while k > 1:
+                if i > 0 and m[i - 1][j] == k-1:
+                    i, j = i-1, j
+                    the_path.append((i, j))
+                    k-=1
+                elif j > 0 and m[i][j - 1] == k-1:
+                    i, j = i, j-1
+                    the_path.append((i, j))
+                    k-=1
+                elif i < len(m) - 1 and m[i + 1][j] == k-1:
+                    i, j = i+1, j
+                    the_path.append((i, j))
+                    k-=1
+                elif j < len(m[i]) - 1 and m[i][j + 1] == k-1:
+                    i, j = i, j+1
+                    the_path.append((i, j))
+                    k -= 1
+                self.draw_matrix(self.a, m,start,end, the_path)
+
+            for i in range(10):
+                if i % 2 == 0:
+                    self.draw_matrix(self.a, m,start,end, the_path)
+                else:
+                    self.draw_matrix(self.a, m,start,end)
+
+            self.save_img()
+            # if there are not solutions break the loop
+            return the_path
 
 
     
 
-   
-        
-        
-
+    
