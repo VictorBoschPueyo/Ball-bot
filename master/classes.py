@@ -19,11 +19,11 @@ class Node:
         
         self.pos = pos
         self.is_wall = wall # true/false
-        self.visited = False #list of egdes 
-        self.neighbours = [] #list of neighbours 
-    
-    def set_neighbour(self, node):
-        self.neighbours.append(node)
+        self.visited = False #list of egdes  
+        self.Neighbors= {}
+
+
+   
 
         
 class Board:
@@ -43,6 +43,7 @@ class Board:
         self.ball_mask, self.ball = self.binarize_ball(frame)
         self.N=20
         self.images = []
+        
 
         maze=cv2.subtract(frame, self.ball)
         maze[np.where(self.ball_mask==255)] = 255
@@ -58,7 +59,7 @@ class Board:
         self.calculate_boxes()
         self.calculate_ballPosition()
         #self.detector()
-        self.calculate_neighbors()
+        self.get_neigbors()
         
         self.a=np.pad(1-self.get_simple_matrix(), 1, 'constant', constant_values=1)
         self.images=[]
@@ -133,21 +134,7 @@ class Board:
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    def calculate_neighbors(self):
-         #############################################
-        # Aquesta funció servirà per a calcular
-        # els veins possibles de cada node
-        #############################################
-        tots = self.list_boxes.copy()
-        for node1 in tots:
-            for node2 in tots:
-                if node1 != node2 and node2.is_wall == False:
-                    if (node2.pos[1] == node1.pos[1]):
-                        if (node2.pos[0] == node1.pos[0]+1) or (node2.pos[0] == node1.pos[0]-1):
-                            node1.set_neighbour(node2)
-                    if (node2.pos[0] == node1.pos[0]):
-                        if (node2.pos[1] == node1.pos[1]+1) or (node2.pos[1] == node1.pos[1]-1):
-                            node1.set_neighbour(node2)
+    
                    
     def calculate_ballPosition(self):
         ##############################################
@@ -245,12 +232,44 @@ class Board:
         self.images[0].save('recreation.gif',save_all=True, append_images= self.images[1:],optimize=False, duration=1, loop=0)
 
 
+
+    def get_neigbors(self):
+        ##############################################
+        # Calcula els veins de cada node
+        # hem de guardar els veins en un diccionari 
+        # si el vei esta a la dreta pusem la posicio del vei : d
+        # si el vei esta a la esquerra pusem la posicio del vei : e
+        # si el vei esta a l'adalt pusem la posicio del vei : a
+        # si el vei esta a l'abaix pusem la posicio del vei : b
+        ##############################################
+        for node in self.list_boxes:
+            if node.is_wall == False:
+                for node2 in self.list_boxes:
+                    if node2.is_wall == False:
+                        if node2.pos[1] == node.pos[1]:
+                            if node2.pos[0] == node.pos[0]+1:
+                                node.Neighbors[node2.pos] = 'down'
+                                continue
+                            if node2.pos[0] == node.pos[0]-1:
+                                node.Neighbors[node2.pos] = 'up'
+                                continue
+                        if node2.pos[0] == node.pos[0]:
+                            if node2.pos[1] == node.pos[1]+1:
+                                node.Neighbors[node2.pos] = 'right'
+                                continue
+                            if node2.pos[1] == node.pos[1]-1:
+                                node.Neighbors[node2.pos] = 'left'
+                                continue
+        
+
+  
+
+    
     def get_path(self,start,end):
         ##############################################
         # Calcula el cammin de la busqueda
         ##############################################
             
-              
             m = []
             for i in range(len(self.a)):
                 m.append([])

@@ -61,7 +61,6 @@ if __name__ == '__main__':
     test=Board(frame)
     start = 1,18
     end = 20,18
-
     print(list(reversed(test.get_path(start,end))))
  
     
