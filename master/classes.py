@@ -9,17 +9,15 @@ class Node:
     def __init__(self, pos, wall):
         ############################
         # Actual list of attributes:
-        #   -Pos_ini
-        #   -Pos_fin
-        #   -Size of box
+        #   -Pos
         #   -Is wall or not
-        #   -Edges
+        #   -Visited
         #   -Neighbors
         ############################
         
         self.pos = pos
         self.is_wall = wall # true/false
-        self.visited = False #list of egdes  
+        self.visited = False  
         self.Neighbors= {}
 
 

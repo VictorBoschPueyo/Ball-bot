@@ -56,12 +56,38 @@ def show_matriz(sol):
         print("")
 
 
-if __name__ == '__main__':  
+if __name__ == '__main__':
+    #aqui captariamos la primera foto de la camara, que es el tablero en reposo, para asi calcular el camino
+    #al principio
+    #############
+    
+    #aqui procesamos este primer frame captado
     frame=pre_process_image('bdd/prova1.jpeg')
+    
+    #aqui ya creamos el objeto Board con el primer frame
     test=Board(frame)
+    
+    #ponemos como inicio la posicion de la bola, y como final el cuadradito que siempre será fijo (sera una constante)
     start = 1,18
     end = 20,18
+    
+    #calculamos el camino
+    startt = time.time()
     print(list(reversed(test.get_path(start,end))))
+    end = time.time()
+    print(end - startt)
+    
+    #aqui empezaríamos un bucle donde, la condicion de seguir sería que no hemos llegado al final
+    # (ball_position != final), pero tambien tenemos que parar cuando no encontremos la bola,
+    # es decir, ball_position sea indefinido
+    while (True): #NOTA: este bucle se hará cada vez que se capte un frame de la camara
+        #captamos el frame del videostream (osea captar el frame de la camara)
+        #calcular posición actual de la bola
+        #si (ball_position not in camino calculado) recalculamos camino
+        #si (ball_position in camino calculado) 
+            #entonces miramos si de una iteración a otra
+            #ha cambiado la posición de la bola, si ha cambiado entonces miramos cual es la siguiente
+            #casilla del camino para determinar la dirección del camino, y mover el servo segun sea conveniente
  
     
  
