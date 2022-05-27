@@ -59,36 +59,63 @@ def show_matriz(sol):
 if __name__ == '__main__':
     #aqui captariamos la primera foto de la camara, que es el tablero en reposo, para asi calcular el camino
     #al principio
-    #############
+    cap = cv2.VideoCapture(0)
+    leido, frame = cap.read()
+    if leido == True:
+        frame=pre_process_image(frame)
+    else:
+        cap.release()
+        raise ValueError("Error de acceso a la camara")
+        exit()
     
+    cap.release()
     #aqui procesamos este primer frame captado
-    frame=pre_process_image('bdd/prova1.jpeg')
+    #frame=pre_process_image('bdd/prova1.jpeg')
     
     #aqui ya creamos el objeto Board con el primer frame
-    test=Board(frame)
+    board=Board(frame)
     
     #ponemos como inicio la posicion de la bola, y como final el cuadradito que siempre será fijo (sera una constante)
-    start = 1,18
-    end = 20,18
+    start_position_path = board.ball_position
+    end_position_path = 20,18 #constante fija
     
     #calculamos el camino
-    startt = time.time()
-    print(list(reversed(test.get_path(start,end))))
+    start = time.time()
+    path = list(reversed(board.get_path(start_position_path,end_position_path)))
     end = time.time()
-    print(end - startt)
+    print("Tiempo de calculo del camino provisional: ", end - start)
     
     #aqui empezaríamos un bucle donde, la condicion de seguir sería que no hemos llegado al final
     # (ball_position != final), pero tambien tenemos que parar cuando no encontremos la bola,
     # es decir, ball_position sea indefinido
-    while (True): #NOTA: este bucle se hará cada vez que se capte un frame de la camara
+    while (board.ball_position != end_position_path and board.ball_position != None): #NOTA: este bucle se hará cada vez que se capte un frame de la camara
+        last_ballPosition = board.ball_position
         #captamos el frame del videostream (osea captar el frame de la camara)
-        #calcular posición actual de la bola
+        cap = cv2.VideoCapture(0)
+        leido, frame = cap.read()
+        if leido == True:
+            frame=pre_process_image(frame)
+            #calcular posición actual de la bola
+            board.process_frame(frame)
+        else:
+            cap.release()
+            raise ValueError("Error de acceso a la camara")
+            exit()
+        
         #si (ball_position not in camino calculado) recalculamos camino
-        #si (ball_position in camino calculado) 
-            #entonces miramos si de una iteración a otra
-            #ha cambiado la posición de la bola, si ha cambiado entonces miramos cual es la siguiente
-            #casilla del camino para determinar la dirección del camino, y mover el servo segun sea conveniente
- 
+        if (board.ball_position not in path):
+            start_position_path = board.ball_position
+            path = list(reversed(board.get_path(start_position_path,end_position_path)))
+        
+        #si (ball_position in camino calculado)
+        else:
+            #entonces miramos si de una iteración a otra ha cambiado la posición de la bola, 
+            if (board.ball_position != last_ballPosition):
+                #si ha cambiado entonces miramos cual es la siguiente
+                #casilla del camino para determinar la dirección del camino, y mover el servo segun sea conveniente
+                next_box = path[path.index(board.ball_position) + 1]
+                #aqui llamariamos a la función que mira la siguiente dirección y entonces moveriamos el servo
+    cap.release()
     
  
 

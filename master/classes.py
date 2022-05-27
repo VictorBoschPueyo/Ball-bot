@@ -34,33 +34,17 @@ class Board:
         #   -Initial frame
         #   -Size of the board
         #   -Ball position
+        #   -N
+        #   -Images
+        #   -a
         ############################
         
         self.list_boxes = []
         self.ball_position = (0,0)
-        self.ball_mask, self.ball = self.binarize_ball(frame)
         self.N=20
         self.images = []
         
-
-        maze=cv2.subtract(frame, self.ball)
-        maze[np.where(self.ball_mask==255)] = 255
-        self.walls, self.wall_bin = self.read_board(maze)
-
-        #Eliminado el borde de madera (el fondo que estorba, vamos)
-        self.initial_frame = self.delete_background(self.wall_bin, frame)
-        self.ball_mask = self.delete_background(self.wall_bin, self.ball_mask)
-        self.ball = self.delete_background(self.wall_bin, self.ball)
-        self.walls = self.delete_background(self.wall_bin, self.walls)
-        self.wall_bin = self.delete_background(self.wall_bin, self.wall_bin)
-        
-        self.calculate_boxes()
-        self.calculate_ballPosition()
-        #self.detector()
-        self.get_neigbors()
-        
-        self.a=np.pad(1-self.get_simple_matrix(), 1, 'constant', constant_values=1)
-        self.images=[]
+        self.process_frame(frame)
         
     def delete_background(self, wall_bin, img):
         ''' ES NECESARIA LA BINARIZACION DE LAS PAREDES PARA BORRAR EL FONDO'''
@@ -140,9 +124,12 @@ class Board:
         ##############################################
         
         indices = np.where(self.ball_mask == 255)
-        indices = np.sort(indices)
-        indices = np.median(indices, axis=1)
-        self.ball_position = (int(indices[0]), int(indices[1]))
+        if len(indices) == 0:
+            self.ball_position = None
+        else:
+            indices = np.sort(indices)
+            indices = np.median(indices, axis=1)
+            self.ball_position = (int(indices[0]), int(indices[1]))
 
     def calcule_index_from_ball_position(self,cordinates):
         ##############################################
@@ -316,6 +303,28 @@ class Board:
             self.save_img()
             # if there are not solutions break the loop
             return the_path
+        
+    def process_frame(self, frame):
+        self.ball_mask, self.ball = self.binarize_ball(frame)
+        
+        maze=cv2.subtract(frame, self.ball)
+        maze[np.where(self.ball_mask==255)] = 255
+        self.walls, self.wall_bin = self.read_board(maze)
+
+        #Eliminado el borde de madera (el fondo que estorba, vamos)
+        self.initial_frame = self.delete_background(self.wall_bin, frame)
+        self.ball_mask = self.delete_background(self.wall_bin, self.ball_mask)
+        self.ball = self.delete_background(self.wall_bin, self.ball)
+        self.walls = self.delete_background(self.wall_bin, self.walls)
+        self.wall_bin = self.delete_background(self.wall_bin, self.wall_bin)
+        
+        self.calculate_boxes()
+        self.calculate_ballPosition()
+        #self.detector() #con esto se dibujaban los contornos de la pared, no es necesario para la ejecucion
+        self.get_neigbors()
+        
+        self.a=np.pad(1-self.get_simple_matrix(), 1, 'constant', constant_values=1)
+        self.images=[]
 
 
     
