@@ -20,15 +20,13 @@ In addition, there will be a screen showing the circuit that captures the camera
 - CAMERA
 - SD
 - SERVOMOTOR (3)
-- SCREEN
 
 ## Hardware Scheme
-Insertar foto del esquema
+![This is the hardware scheme of our robot](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/hardware_scheme.PNG)
 
 The connections will go as follow:
 - Both power supplies will be connected to a Power Bank
 - Camera connected to Raspberry Pi camera module
-- Screen connected to Raspberry Pi display module
 - Raspberry Pi pin 6 (GND) to PCA9665 GND pin
 - Raspberry Pi pin 2 (5V) to PCA9665 VCC pin
 - Raspberry Pi pin 3 (GPIO 2) to PCA9665 SDA pin
@@ -37,7 +35,7 @@ The connections will go as follow:
 
 ## Software Architecture
 ## Software design
-Insertar foto del esquema de software design
+![This is the software design of our robot](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/software_design.PNG)
 - Board treatment: Identify the structure of the maze (position and orientation
 of the walls, identification of start and goal points).
 - Ball treatment: identifying the ball's position; necessary for calculating the
@@ -71,8 +69,8 @@ The following features make our project unique:
 
 Insertar foto del prototipo
 
-Insertar fotos de las piezas 3D
-
+![3D Pieces 1](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/3d_pieces_1.PNG)
+![3D Pieces 2](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/3d_pieces_2.PNG)
 ## Features
 
 - Import a HTML file and watch it magically convert to Markdown
