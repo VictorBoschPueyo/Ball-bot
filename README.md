@@ -67,7 +67,7 @@ The following features make our project unique:
 - RED FOAM BALL
 - CAMERA SUPPORT
 
-Insertar foto del prototipo
+![3D Pieces 1](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/prototype.PNG)
 
 ![3D Pieces 1](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/3d_pieces_1.PNG)
 ![3D Pieces 2](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/3d_pieces_2.PNG)
