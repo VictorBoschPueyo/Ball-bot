@@ -66,7 +66,7 @@ The connections will go as follow:
 - Jetson Nano pin 2 (5V) to PCA9665 VCC pin
 - Jetson Nano pin 3 (GPIO 2) to PCA9665 SDA pin
 - Jetson Nano pin 5 (GPIO 3) to PCA9665 SCL pin
-- 3 servos connected to PCA9665 0, 8 and 15
+- 2 servos connected to PCA9665 0, 8 and 15
 
 ## Software Architecture
 Here we will describe the software architecture of our project.
