@@ -1,10 +1,8 @@
 # BALLBOT
-## Project description
-This project aims to recreate the maze game with a ball. This ball will move with the movement of the board, in order to reach the final destination.
-To give it a different point of view, it will be the same BALLBOT who moves the board, and it will be the player who designs the circuit. Therefore, the robot must be able to adapt to the board each time the user modifies it.
-In addition, there will be a screen showing the circuit that captures the camera, and the circuit that the robot has calculated to take the ball to its final destination will be drawn in real time.
 
 # Table of Contents
+   * [Project description](#Project-description)
+   * [Requirements](#Requirements)
    * [Electronic components](#Electronic-components)
    * [Hardware Scheme](#Hardware-Scheme)
    * [Software Architecture](#Software-Architecture)
@@ -14,6 +12,36 @@ In addition, there will be a screen showing the circuit that captures the camera
    * [Amazing contributions](#Amazing-contributions)
    * [Extra components and 3D pieces](#Extra-components-and-3D-pieces)
    
+
+## Project description
+This project aims to recreate the maze game with a ball. This ball will move with the movement of the board, in order to reach the final destination.
+To give it a different point of view, it will be the same BALLBOT who moves the board, and it will be the player who designs the circuit. Therefore, the robot must be able to adapt to the board each time the user modifies it.
+In addition, there will be a screen showing the circuit that captures the camera, and the circuit that the robot has calculated to take the ball to its final destination will be drawn in real time.
+
+## Requirements
+For running each sample code:
+- [Adafruit-CircuitPython] - CircuitPython helper library for the PWM/Servo FeatherWing, Shield and Pi HAT and Bonnet kits.
+- [gpio] - This package provides a Python module to control the GPIO on a Raspberry Pi.
+- [numpy] - NumPy offers comprehensive mathematical functions, random number generators, linear algebra routines, Fourier transforms, and more.
+- [opencv-python-headless] - Pre-built CPU-only OpenCV packages for Python.
+- [Pillow] - The Python Imaging Library adds image processing capabilities to your Python interpreter.
+
+## Documentation
+An introduction to the project that was developed for the Robotics subject is included in this README.
+Documents related to the project development can be found in the following [folder].
+Whether you have recommendations about it, or if you have suggestions for improving it, let us know.
+Our project can be scaled up and improved by adding new tools that provide more robustness and ease of use for the robot.
+
+## How to use
+1. Clone this repo.
+```sh
+git clone  https://github.com/VictorBoschPueyo/Robotics-project 
+```
+2. Install the required libraries.
+```sh
+pip install -r requirements/requirements.txt
+```
+3.Execute python script.
 
 ## Electronic components
 - RASPBERRY PI 3
@@ -101,3 +129,9 @@ Luis Fernando Paz  Galeano   1567369
 
    [PlGh]: <https://github.com/VictorBoschPueyo/Robotics-project.git>
    [PlGd]: <https://drive.google.com/drive/folders/1HyyOAsSVA52dkZ4_BdE1-cv34iZsNWCG>
+   [Adafruit-CircuitPython]:<https://docs.circuitpython.org/projects/servokit/en/latest/>
+   [gpio]: <https://pypi.org/project/RPi.GPIO/>
+   [numpy]:<https://numpy.org/>
+   [opencv-python-headless]: <https://pypi.org/project/opencv-python-headless/>
+   [Pillow]:<https://pillow.readthedocs.io/en/stable/>
+   [folder]:<https://github.com/VictorBoschPueyo/Robotics-project/tree/main/docs>

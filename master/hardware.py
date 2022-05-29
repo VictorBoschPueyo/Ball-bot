@@ -1,4 +1,4 @@
-'''import gpio
+import gpio
 from adafruit_servokit import ServoKit
 #Initialize the kit
 kit = ServoKit(channels=16)
@@ -42,4 +42,4 @@ def connect():
 
 
 def record_video():
-    pass'''
+    pass
