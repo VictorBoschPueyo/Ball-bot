@@ -26,7 +26,6 @@ In addition, there will be a screen showing the circuit that captures the camera
 ## Requirements
 For running each sample code:
 - [Adafruit-CircuitPython] - CircuitPython helper library for the PWM/Servo FeatherWing, Shield and Pi HAT and Bonnet kits.
-- [gpio] - This package provides a Python module to control the GPIO on a Jetson Nano.
 - [numpy] - NumPy offers comprehensive mathematical functions, random number generators, linear algebra routines, Fourier transforms, and more.
 - [opencv-python-headless] - Pre-built CPU-only OpenCV packages for Python.
 - [Pillow] - The Python Imaging Library adds image processing capabilities to your Python interpreter.
@@ -53,7 +52,7 @@ pip install -r requirements/requirements.txt
 - CAMERA
 - SD
 - SERVOMOTOR (2)
-- POWERBANK
+- PCA9665
 
 ## Hardware Scheme
 ![This is the hardware scheme of our robot](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/hardware_scheme.PNG)
