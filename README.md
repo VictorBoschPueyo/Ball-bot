@@ -12,6 +12,10 @@
         * [Class diagram](#Class-diagram)
    * [Amazing contributions](#Amazing-contributions)
    * [Extra components and 3D pieces](#Extra-components-and-3D-pieces)
+   * [Features](#Features)
+   * [Links](#Links)
+   * [License](#License)
+   * [Authors](#Authors)
    
 
 ## Project description
@@ -53,6 +57,7 @@ pip install -r requirements/requirements.txt
 ## Hardware Scheme
 ![This is the hardware scheme of our robot](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/hardware_scheme.PNG)
 
+Here we have the hardware scheme of Ball Bot.
 The connections will go as follow:
 - Both power supplies will be connected to a Power Bank
 - Camera connected to Raspberry Pi camera module
@@ -63,6 +68,7 @@ The connections will go as follow:
 - 3 servos connected to PCA9665 0, 8 and 15
 
 ## Software Architecture
+Here we will describe the software architecture of our project.
 ## Software design
 ![This is the software design of our robot](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/software_design.PNG)
 - Board treatment: Identify the structure of the maze (position and orientation
@@ -72,6 +78,9 @@ path to follow.
 - Search algorithm: determine the path the ball must follow to reach the goal
 point (there are different types of search algorithms, for example:
 backtracking, branch&bound).
+
+![Recreation](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/master/recreation.gif)
+
 - The module indicates to the servos what type of movement they need to
 perform (orientation, force, etc.)
 
@@ -109,11 +118,6 @@ The following features make our project unique:
 - Export documents as Markdown, HTML and PDF
 
 
-
-## Requerimientos
-
-Is necesary to add the following libraries
-
 ## Links
 
 | Plugin | link |
@@ -122,11 +126,13 @@ Is necesary to add the following libraries
 | Google Drive | [plugins/googledrive/README.md][PlGd] |
 
 ## License
-Juan Carlos Martinez Moreno 1566936
-Victor Bosch Pueyo                 1566583
-Alvaro Caravaca Hernández   1566685
-Luis Fernando Paz  Galeano   1567369
 **Free Software**
+
+## Authors
+* Juan Carlos Martinez Moreno 1566936
+* Victor Bosch Pueyo                 1566583
+* Alvaro Caravaca Hernández   1566685
+* Luis Fernando Paz  Galeano   1567369
 
    [PlGh]: <https://github.com/VictorBoschPueyo/Robotics-project.git>
    [PlGd]: <https://drive.google.com/drive/folders/1HyyOAsSVA52dkZ4_BdE1-cv34iZsNWCG>
