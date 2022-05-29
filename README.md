@@ -3,6 +3,7 @@
 # Table of Contents
    * [Project description](#Project-description)
    * [Requirements](#Requirements)
+   * [How to use](#How-to-use)
    * [Electronic components](#Electronic-components)
    * [Hardware Scheme](#Hardware-Scheme)
    * [Software Architecture](#Software-Architecture)
