@@ -26,7 +26,7 @@ In addition, there will be a screen showing the circuit that captures the camera
 ## Requirements
 For running each sample code:
 - [Adafruit-CircuitPython] - CircuitPython helper library for the PWM/Servo FeatherWing, Shield and Pi HAT and Bonnet kits.
-- [gpio] - This package provides a Python module to control the GPIO on a Raspberry Pi.
+- [gpio] - This package provides a Python module to control the GPIO on a Jetson Nano.
 - [numpy] - NumPy offers comprehensive mathematical functions, random number generators, linear algebra routines, Fourier transforms, and more.
 - [opencv-python-headless] - Pre-built CPU-only OpenCV packages for Python.
 - [Pillow] - The Python Imaging Library adds image processing capabilities to your Python interpreter.
@@ -49,10 +49,11 @@ pip install -r requirements/requirements.txt
 3.Execute python script.
 
 ## Electronic components
-- RASPBERRY PI 3
+- JETSON NANO
 - CAMERA
 - SD
-- SERVOMOTOR (3)
+- SERVOMOTOR (2)
+- POWERBANK
 
 ## Hardware Scheme
 ![This is the hardware scheme of our robot](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/hardware_scheme.PNG)
@@ -60,11 +61,11 @@ pip install -r requirements/requirements.txt
 Here we have the hardware scheme of Ball Bot.
 The connections will go as follow:
 - Both power supplies will be connected to a Power Bank
-- Camera connected to Raspberry Pi camera module
-- Raspberry Pi pin 6 (GND) to PCA9665 GND pin
-- Raspberry Pi pin 2 (5V) to PCA9665 VCC pin
-- Raspberry Pi pin 3 (GPIO 2) to PCA9665 SDA pin
-- Raspberry Pi pin 5 (GPIO 3) to PCA9665 SCL pin
+- Camera connected to Jetson Nano camera module
+- Jetson Nano pin 6 (GND) to PCA9665 GND pin
+- Jetson Nano pin 2 (5V) to PCA9665 VCC pin
+- Jetson Nano pin 3 (GPIO 2) to PCA9665 SDA pin
+- Jetson Nano pin 5 (GPIO 3) to PCA9665 SCL pin
 - 3 servos connected to PCA9665 0, 8 and 15
 
 ## Software Architecture
