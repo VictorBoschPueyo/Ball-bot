@@ -143,3 +143,4 @@ The following features make our project unique:
    [opencv-python-headless]: <https://pypi.org/project/opencv-python-headless/>
    [Pillow]:<https://pillow.readthedocs.io/en/stable/>
    [folder]:<https://github.com/VictorBoschPueyo/Robotics-project/tree/main/docs>
+   [Adafruit-servokit]:<https://docs.circuitpython.org/projects/servokit/en/latest/>
