@@ -59,7 +59,7 @@ def show_matriz(sol):
 if __name__ == '__main__':
     #aqui captariamos la primera foto de la camara, que es el tablero en reposo, para asi calcular el camino
     #al principio
-    '''
+    
     cap = cv2.VideoCapture(0)
     leido, frame = cap.read()
     if leido == True:
@@ -70,9 +70,9 @@ if __name__ == '__main__':
         exit()
     
     cap.release()
-    '''
+    
     #aqui procesamos este primer frame captado
-    frame=pre_process_image('bdd/foto_taulell.jpg')
+    #frame=pre_process_image('bdd/foto_taulell.jpg')
     
     #aqui ya creamos el objeto Board con el primer frame
     board=Board(frame)
