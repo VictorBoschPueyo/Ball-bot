@@ -95,14 +95,15 @@ To understand how does this project work, we will explain it with an example.
 1. First of all, we place the walls in the board making a labyrinth for the robot to solve.
 ![This is the board](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/foto_taulell.jpg)
 
-2. The second step is to localize the ball and the end point to erase them from the board and be able to binarize it.
+2. The second step is to localize the ball and the end point to erase them from the board and be able to binarize it. To locate this two points, we will do some binarization with adaptive thresholds, in order to deal with shadows.
 
 (foto binarizado)
 
-3. Calculate the path (gif del luis)
+3. The third step is calculate the path that will follow the ball. This step is being done with an algorithm that can build an incremental solution,
+   by adding sub-elements to the path, since the full path is built. (gif del luis)
 
 
-4. Move the board
+4. Move the board, following the steps that lead the different nodes of the path. Every node of the path follows a determinated direction, so the principal loop has to determinate the next direction to follow.
 
 
 ## Amazing contributions 
