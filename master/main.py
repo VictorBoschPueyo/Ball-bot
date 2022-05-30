@@ -20,31 +20,6 @@ def pre_process_image(path):
     
     return frame
 
-
-def inclination(direction):
-    #############################################
-    # Aquesta funció s'encarrega de calcular i
-    # inclinar el taulell cap on indica la funció
-    # calculate_path().
-    # No retorna res.
-    #############################################
-    pass
-
-def process_per_frame(frame):
-    #############################################
-    # Aquesta funció crida en ordre totes les
-    # funcions necessaries per a resoldre el
-    # laberint
-    #############################################
-    pass
-
-def setup_components():
-    #############################################
-    # Aquesta funció comprova que tots els compo-
-    # nents siguin funcionals.
-    ############################################
-    pass
-
     
 #################################################
 ######## SPACE FOR MORE NEEDED FUNCTIONS ########
@@ -106,6 +81,7 @@ if __name__ == '__main__':
         
         #si (ball_position not in camino calculado) recalculamos camino
         if (board.ball_position not in path):
+            move_board('stop')
             start_position_path = board.ball_position
             path = list(reversed(board.get_path(start_position_path,end_position_path)))
         
@@ -117,6 +93,7 @@ if __name__ == '__main__':
                 #casilla del camino para determinar la dirección del camino, y mover el servo segun sea conveniente
                 next_box = path[path.index(board.ball_position) + 1]
                 #aqui llamariamos a la función que mira la siguiente dirección y entonces moveriamos el servo
+                move_board(board.ball_position.Neighbors[next_box])
     cap.release()
     
  
