@@ -98,7 +98,7 @@ To understand how does this project work, we will explain it with an example.
 
 2. The second step is to localize the ball and the end point to erase them from the board and be able to binarize it. To locate this two points, we will do some binarization with adaptive thresholds, in order to deal with shadows.
 
-![foto_binarizado](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/master/bdd/bin_walls_exemple.JPG)
+![foto_binarizado](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/master/bdd/bin_walls_e.jpg)
 
 3. The third step is calculate the path that will follow the ball. This step is being done with an algorithm that can build an incremental solution,
    by adding sub-elements to the path, since the full path is built. (gif del luis)
