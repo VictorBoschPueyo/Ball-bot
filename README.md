@@ -106,6 +106,10 @@ To understand how does this project work, we will explain it with an example.
 
 4. Move the board, following the steps that lead the different nodes of the path. Every node of the path follows a determinated direction, so the principal loop has to determinate the next direction to follow.
 
+You can see here an example (click to go to Youtube Video):
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/QjDZ4R32sOU/0.jpg)](https://www.youtube.com/watch?v=QjDZ4R32sOU)
+
 
 ## Amazing contributions 
 The following features make our project unique:
