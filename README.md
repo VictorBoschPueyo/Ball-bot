@@ -79,9 +79,6 @@ path to follow.
 - Search algorithm: determine the path the ball must follow to reach the goal
 point (there are different types of search algorithms, for example:
 backtracking, branch&bound).
-
-![Recreation](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/master/recreation.gif)
-
 - The module indicates to the servos what type of movement they need to
 perform (orientation, force, etc.)
 
@@ -101,7 +98,9 @@ To understand how does this project work, we will explain it with an example.
 ![foto_binarizado](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/master/bdd/bin_walls_e.jpg)
 
 3. The third step is calculate the path that will follow the ball. This step is being done with an algorithm that can build an incremental solution,
-   by adding sub-elements to the path, since the full path is built. (gif del luis)
+   by adding sub-elements to the path, since the full path is built.
+   
+   ![maze_gif](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/master/bdd/maze.gif)
 
 
 4. Move the board, following the steps that lead the different nodes of the path. Every node of the path follows a determinated direction, so the principal loop has to determinate the next direction to follow.
