@@ -1,4 +1,5 @@
 # BALLBOT
+![This is our robot](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/foto_robot.jpg)
 
 # Table of Contents
    * [Project description](#Project-description)
@@ -90,6 +91,8 @@ perform (orientation, force, etc.)
 ![This is the Class diagram of our robot](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/spr2-diag-clases.drawio.png)
 
 ## Example of how it works
+BlaBlaBala
+![This is the board](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/foto_taulell.jpg)
 BlaBlaBla
 
 
