@@ -26,7 +26,6 @@ In addition, there will be a screen showing the circuit that captures the camera
 ## Requirements
 For running each sample code:
 - [Adafruit-CircuitPython] - CircuitPython helper library for the PWM/Servo FeatherWing, Shield and Pi HAT and Bonnet kits.
-- [Adafruit-servokit] - Library that helps to control the servos with the PCA9665.
 - [numpy] - NumPy offers comprehensive mathematical functions, random number generators, linear algebra routines, Fourier transforms, and more.
 - [opencv-python-headless] - Pre-built CPU-only OpenCV packages for Python.
 - [Pillow] - The Python Imaging Library adds image processing capabilities to your Python interpreter.
@@ -89,6 +88,9 @@ perform (orientation, force, etc.)
 ![This is the Flowchart of our robot](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/spr3-diag-flujo.drawio.png)
 ## Class diagram
 ![This is the Class diagram of our robot](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/spr2-diag-clases.drawio.png)
+
+## Example of how it works
+BlaBlaBla
 
 
 ## Amazing contributions 
