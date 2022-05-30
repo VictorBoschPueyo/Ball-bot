@@ -59,6 +59,7 @@ def show_matriz(sol):
 if __name__ == '__main__':
     #aqui captariamos la primera foto de la camara, que es el tablero en reposo, para asi calcular el camino
     #al principio
+    '''
     cap = cv2.VideoCapture(0)
     leido, frame = cap.read()
     if leido == True:
@@ -69,15 +70,16 @@ if __name__ == '__main__':
         exit()
     
     cap.release()
+    '''
     #aqui procesamos este primer frame captado
-    #frame=pre_process_image('bdd/prova1.jpeg')
+    frame=pre_process_image('bdd/foto_taulell.jpg')
     
     #aqui ya creamos el objeto Board con el primer frame
     board=Board(frame)
     
     #ponemos como inicio la posicion de la bola, y como final el cuadradito que siempre será fijo (sera una constante)
     start_position_path = board.ball_position
-    end_position_path = 20,18 #constante fija
+    end_position_path = board.calculate_endPosition()
     
     #calculamos el camino
     start = time.time()

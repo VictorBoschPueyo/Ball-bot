@@ -96,6 +96,21 @@ class Board:
         result = cv2.bitwise_and(result, result, mask=mask)
         
         return mask, result
+    
+    def binarize_end(self, image):
+        #############################################
+        # Aquesta funció servirà per a determinar
+        # el final del cami
+        # Retorna la posició del final del cami
+        #############################################
+        result = image.copy()
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        lower = np.array([110,50,50])
+        upper = np.array([130,255,255])
+        mask = cv2.inRange(image, lower, upper)
+        result = cv2.bitwise_and(result, result, mask=mask)
+        
+        return mask, result
 
     def detector(self):
         #############################################
@@ -130,6 +145,19 @@ class Board:
             indices = np.sort(indices)
             indices = np.median(indices, axis=1)
             self.ball_position = (int(indices[0]), int(indices[1]))
+            
+    def calculate_endPosition(self):
+        ##############################################
+        # Calcula la posicion del centro de la pelota
+        ##############################################
+        
+        indices = np.where(self.end_circleMask == 255)
+        if len(indices) == 0:
+            return None
+        else:
+            indices = np.sort(indices)
+            indices = np.median(indices, axis=1)
+            return (int(indices[0]), int(indices[1]))
 
     def calcule_index_from_ball_position(self,cordinates):
         ##############################################
@@ -306,6 +334,7 @@ class Board:
         
     def process_frame(self, frame):
         self.ball_mask, self.ball = self.binarize_ball(frame)
+        self.end_circleMask, self.end_circle = self.binarize_end(frame)
         
         maze=cv2.subtract(frame, self.ball)
         maze[np.where(self.ball_mask==255)] = 255
@@ -317,6 +346,7 @@ class Board:
         self.ball = self.delete_background(self.wall_bin, self.ball)
         self.walls = self.delete_background(self.wall_bin, self.walls)
         self.wall_bin = self.delete_background(self.wall_bin, self.wall_bin)
+        self.end_circleMask = self.delete_background(self.wall_bin, self.end_circleMask)
         
         self.calculate_boxes()
         self.calculate_ballPosition()
