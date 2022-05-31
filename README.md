@@ -11,6 +11,7 @@
         * [Software design](#Software-design)
         * [Flowchart](#Flowchart)
         * [Class diagram](#Class-diagram)
+   * [Example of how it works](#Example of how it works)
    * [Amazing contributions](#Amazing-contributions)
    * [Extra components and 3D pieces](#Extra-components-and-3D-pieces)
    * [Features](#Features)
@@ -97,7 +98,9 @@ To understand how does this project work, we will explain it with an example.
 
 ![foto_binarizado](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/master/bdd/bin_walls_e.jpg)
 
-3. The third step is calculate the path that will follow the ball. This step is being done with an algorithm that can build an incremental solution,
+3. The third step is to interpretate the board and create the correct representation of it in a Board object. In this class we will specify every necessary parameter to solve the maze and to control where is the ball in every movement we do. Inside of it we can find that the representation of the board is made with a matrix of Nodes.
+
+4. The forth step is calculate the path that will follow the ball. This step is being done with an algorithm that can build an incremental solution,
    by adding sub-elements to the path, since the full path is built.
    
    ![maze_gif](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/master/bdd/maze.gif)
