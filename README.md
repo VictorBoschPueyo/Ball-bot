@@ -11,7 +11,7 @@
         * [Software design](#Software-design)
         * [Flowchart](#Flowchart)
         * [Class diagram](#Class-diagram)
-   * [Example of how it works](#Example of how it works)
+   * [Example of how it works](#Example-of-how-it-works)
    * [Amazing contributions](#Amazing-contributions)
    * [Extra components and 3D pieces](#Extra-components-and-3D-pieces)
    * [Features](#Features)
