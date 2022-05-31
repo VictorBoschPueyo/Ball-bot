@@ -11,6 +11,7 @@
         * [Software design](#Software-design)
         * [Flowchart](#Flowchart)
         * [Class diagram](#Class-diagram)
+   * [Example of how it works](#Example-of-how-it-works)
    * [Amazing contributions](#Amazing-contributions)
    * [Extra components and 3D pieces](#Extra-components-and-3D-pieces)
    * [Features](#Features)
@@ -79,9 +80,6 @@ path to follow.
 - Search algorithm: determine the path the ball must follow to reach the goal
 point (there are different types of search algorithms, for example:
 backtracking, branch&bound).
-
-![Recreation](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/master/recreation.gif)
-
 - The module indicates to the servos what type of movement they need to
 perform (orientation, force, etc.)
 
@@ -91,9 +89,28 @@ perform (orientation, force, etc.)
 ![This is the Class diagram of our robot](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/spr2-diag-clases.drawio.png)
 
 ## Example of how it works
-BlaBlaBala
+To understand how does this project work, we will explain it with an example.
+1. First of all, we place the walls in the board making a labyrinth for the robot to solve.
+
 ![This is the board](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/foto_taulell.jpg)
-BlaBlaBla
+
+2. The second step is to localize the ball and the end point to erase them from the board and be able to binarize it. To locate this two points, we will do some binarization with adaptive thresholds, in order to deal with shadows.
+
+![foto_binarizado](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/master/bdd/bin_walls_e.jpg)
+
+3. The third step is to interpretate the board and create the correct representation of it in a Board object. In this class we will specify every necessary parameter to solve the maze and to control where is the ball in every movement we do. Inside of it we can find that the representation of the board is made with a matrix of Nodes.
+
+4. The forth step is calculate the path that will follow the ball. This step is being done with an algorithm that can build an incremental solution,
+   by adding sub-elements to the path, since the full path is built.
+   
+   ![maze_gif](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/master/bdd/maze.gif)
+
+
+4. Move the board, following the steps that lead the different nodes of the path. Every node of the path follows a determinated direction, so the principal loop has to determinate the next direction to follow.
+
+You can see here an example (click to go to Youtube Video):
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/QjDZ4R32sOU/0.jpg)](https://www.youtube.com/watch?v=QjDZ4R32sOU)
 
 
 ## Amazing contributions 
@@ -115,6 +132,7 @@ The following features make our project unique:
 
 ![3D Pieces 1](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/3d_pieces_1.PNG)
 ![3D Pieces 2](https://github.com/VictorBoschPueyo/Robotics-project/blob/main/docs/diagrams/3d_pieces_2.PNG)
+
 ## Features
 
 - Import a HTML file and watch it magically convert to Markdown
